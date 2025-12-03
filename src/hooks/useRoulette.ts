@@ -2,10 +2,7 @@
 
 import { useCallback } from "react";
 import { useRouletteStore } from "@/store/uiStore";
-import {
-  generateRouletteResult,
-  calculateSpinDuration,
-} from "@/utils/roulette.utils";
+import { Roulette } from "@/utils/roulette.utils";
 
 /**
  * 룰렛 기능을 위한 커스텀 훅
@@ -29,10 +26,10 @@ export function useRoulette() {
     startSpinning();
 
     // 회전 애니메이션 시간
-    const spinDuration = calculateSpinDuration();
+    const spinDuration = Roulette.calculateSpinDuration();
 
     // 결과 미리 계산
-    const rouletteResult = generateRouletteResult(items);
+    const rouletteResult = Roulette.generateResult(items);
 
     // 애니메이션 완료 후 결과 설정
     return new Promise((resolve) => {
