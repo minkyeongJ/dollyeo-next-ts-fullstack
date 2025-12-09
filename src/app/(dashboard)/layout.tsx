@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
-import { auth } from "@/auth/auth";
+// import { redirect } from "next/navigation";
+// import { auth } from "@/auth/auth";
 import { DashboardProviders } from "./providers";
 import { DashboardHeader } from "@/components/features";
 
@@ -8,23 +8,25 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  // TODO: 인증 로직 임시 비활성화 - 나중에 다시 활성화 필요
+  // const session = await auth();
+  // if (!session?.user) {
+  //   redirect("/login");
+  // }
 
-  // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
-  if (!session?.user) {
-    redirect("/login");
-  }
+  // 임시 사용자 정보
+  const tempUser = {
+    name: "테스트 사용자",
+    email: "test@example.com",
+  };
 
   return (
     <DashboardProviders>
-      <div className="min-h-screen bg-gray-100">
-        <DashboardHeader
-          userName={session.user.name}
-          userEmail={session.user.email}
-        />
+      <div className="min-h-screen" style={{ background: "var(--background)" }}>
+        <DashboardHeader userName={tempUser.name} userEmail={tempUser.email} />
 
         {/* 메인 컨텐츠 */}
-        <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           {children}
         </main>
       </div>
