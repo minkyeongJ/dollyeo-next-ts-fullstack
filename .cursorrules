@@ -1,0 +1,278 @@
+# 프로젝트 디자인 시스템 가이드
+
+이 프로젝트는 클라썸 스타일의 교육용 커뮤니티 플랫폼 디자인 시스템을 따릅니다.
+UI 컴포넌트 작성 시 아래 가이드라인을 준수해주세요.
+
+## 마스코트
+
+- 마스코트 이미지: `/public/mascot.png`
+- 안경을 쓴 귀여운 솜뭉치 캐릭터
+- 친근하고 따뜻한 브랜드 이미지를 표현
+- 사용처: 헤더 로고, 인트로 섹션, 로딩 상태, 빈 상태, 에러 페이지 등
+- 애니메이션: 부드러운 위아래 움직임 (bounce) 권장
+
+```tsx
+// 마스코트 사용 예시
+<img 
+  src="/mascot.png" 
+  alt="돌려요 마스코트" 
+  className="w-10 h-10 object-contain"
+/>
+
+// 애니메이션 적용 예시 (Framer Motion)
+<motion.img 
+  src="/mascot.png" 
+  alt="돌려요 마스코트" 
+  animate={{ y: [0, -8, 0] }}
+  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+/>
+```
+
+## 컬러 시스템
+
+### Primary Colors (Indigo) - 주요 액션, 브랜드 요소
+- 사용: 버튼, 링크, 강조 요소, 선택 상태
+- 클래스: `bg-indigo-500`, `text-indigo-600`, `border-indigo-500`
+- CSS 변수: `var(--primary-500)` ~ `var(--primary-900)`
+
+### Secondary Colors (Teal) - 보조 액션, 성공/긍정 요소
+- 사용: 보조 버튼, 성공 상태, 진행 표시
+- 클래스: `bg-teal-500`, `text-teal-600`
+- CSS 변수: `var(--secondary-500)` ~ `var(--secondary-900)`
+
+### Accent Colors (Rose) - 강조, 알림, 좋아요
+- 사용: 알림 뱃지, 좋아요 버튼, 중요 표시
+- 클래스: `bg-rose-500`, `text-rose-600`
+- CSS 변수: `var(--accent-500)` ~ `var(--accent-900)`
+
+### Semantic Colors
+- Success: `bg-emerald-100 text-emerald-700` (light), `bg-emerald-500` (main)
+- Warning: `bg-amber-100 text-amber-700` (light), `bg-amber-500` (main)
+- Error: `bg-rose-100 text-rose-700` (light), `bg-rose-500` (main)
+- Info: `bg-blue-100 text-blue-700` (light), `bg-blue-500` (main)
+
+### 배경 및 표면
+- 페이지 배경: `var(--background)` 또는 `bg-slate-50`
+- 카드/표면: `bg-white`
+- 호버 상태: `bg-gray-100`, `hover:bg-gray-200`
+
+### 텍스트 색상
+- Primary (제목, 본문): `text-gray-900`
+- Secondary (부제목, 설명): `text-gray-600`
+- Muted (메타 정보, 힌트): `text-gray-400`, `text-gray-500`
+- Inverse (어두운 배경 위): `text-white`
+
+## 타이포그래피
+
+### 폰트 크기 스케일
+- 4XL (36px): 페이지 메인 타이틀 - `text-4xl font-bold`
+- 3XL (30px): 섹션 대제목 - `text-3xl font-bold`
+- 2XL (24px): 섹션 제목 - `text-2xl font-semibold`
+- XL (20px): 카드 제목 - `text-xl font-semibold`
+- LG (18px): 서브 제목 - `text-lg font-medium`
+- Base (16px): 본문 - `text-base`
+- SM (14px): 보조 텍스트 - `text-sm`
+- XS (12px): 메타 정보, 라벨 - `text-xs`
+
+### 폰트 굵기
+- 제목: `font-bold` (700) 또는 `font-semibold` (600)
+- 본문: `font-normal` (400) 또는 `font-medium` (500)
+- 라벨: `font-medium` (500)
+
+## 컴포넌트 사용 규칙
+
+### Button 컴포넌트
+```tsx
+import { Button } from "@/components/ui/Button";
+
+// Variants
+<Button variant="primary">주요 액션</Button>
+<Button variant="secondary">보조 액션</Button>
+<Button variant="danger">위험 액션</Button>
+<Button variant="ghost">최소 강조</Button>
+
+// Sizes
+<Button size="sm">작은 버튼</Button>
+<Button size="md">기본 버튼</Button>
+<Button size="lg">큰 버튼</Button>
+
+// With Icons (SVG 아이콘 사용, 이모지 금지)
+<Button leftIcon={<PlusIcon />}>새로 만들기</Button>
+<Button rightIcon={<ArrowRightIcon />}>다음</Button>
+```
+
+### Input 컴포넌트
+```tsx
+import { Input } from "@/components/ui/Input";
+
+<Input label="라벨" placeholder="플레이스홀더" />
+<Input label="검색" leftIcon={<SearchIcon />} />
+<Input error="에러 메시지" />
+<Input helperText="도움말 텍스트" />
+```
+
+### Modal 컴포넌트
+```tsx
+import { Modal } from "@/components/ui/Modal";
+
+<Modal isOpen={isOpen} onClose={onClose} title="제목" size="md">
+  {/* 컨텐츠 */}
+</Modal>
+```
+
+### Badge 패턴
+```tsx
+// 뱃지 스타일 클래스
+const badgeVariants = {
+  default: "bg-gray-100 text-gray-700",
+  primary: "bg-indigo-100 text-indigo-700",
+  success: "bg-emerald-100 text-emerald-700",
+  warning: "bg-amber-100 text-amber-700",
+  error: "bg-rose-100 text-rose-700",
+};
+
+<span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700">
+  뱃지
+</span>
+```
+
+## 레이아웃 및 간격
+
+### 간격 스케일 (Tailwind)
+- 1 (4px): 매우 좁은 간격
+- 2 (8px): 인라인 요소 간격
+- 3 (12px): 작은 간격
+- 4 (16px): 기본 간격
+- 6 (24px): 컴포넌트 내부 패딩
+- 8 (32px): 섹션 간 간격
+- 12 (48px): 큰 섹션 간격
+- 16 (64px): 페이지 섹션 간격
+
+### 카드 스타일
+```tsx
+// 기본 카드
+<div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+
+// 호버 효과 카드
+<div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+
+// 인터랙티브 카드 (motion)
+<motion.div
+  whileHover={{ y: -4 }}
+  className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-all cursor-pointer"
+>
+```
+
+### 모서리 라운드
+- 작은 요소 (뱃지, 태그): `rounded-full` 또는 `rounded-md`
+- 버튼, 인풋: `rounded-lg`
+- 카드: `rounded-lg` 또는 `rounded-xl`
+- 모달, 큰 컨테이너: `rounded-xl` 또는 `rounded-2xl`
+
+### 그림자
+- 미세한 깊이: `shadow-sm`
+- 기본 카드: `shadow` 또는 `shadow-md`
+- 호버/포커스: `shadow-lg`
+- 모달/드롭다운: `shadow-xl`
+
+## 아이콘 사용 규칙
+
+### 이모지 사용 금지
+- UI에서 이모지 대신 SVG 아이콘을 사용합니다
+- Heroicons 스타일의 outline 아이콘 권장
+
+### 아이콘 크기
+- 버튼/인풋 내: `w-4 h-4`
+- 독립 아이콘: `w-5 h-5`
+- 큰 아이콘: `w-6 h-6`
+
+### 기본 아이콘 세트
+프로젝트에서 사용하는 주요 아이콘:
+- HeartIcon: 좋아요
+- QuestionIcon: 질문/궁금해요
+- ChatIcon: 댓글/답변
+- SearchIcon: 검색
+- PlusIcon: 추가
+- ArrowRightIcon: 다음/이동
+- ExportIcon: 내보내기
+- UsersIcon: 참여자/멤버
+- ChartIcon: 통계/분석
+- CheckIcon: 완료/확인
+- StarIcon: 평점/즐겨찾기
+
+## 애니메이션
+
+### Framer Motion 사용
+```tsx
+import { motion } from "framer-motion";
+
+// 페이드 인 + 슬라이드 업
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+>
+
+// 호버 스케일
+<motion.button
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.98 }}
+>
+
+// 호버 리프트
+<motion.div whileHover={{ y: -4 }}>
+```
+
+### CSS 애니메이션 클래스
+- `animate-fade-in`: 페이드 인
+- `animate-slide-up`: 아래에서 위로
+- `animate-scale-in`: 스케일 인
+- `transition-all`, `transition-colors`, `transition-shadow`: 부드러운 전환
+
+## 반응형 디자인
+
+### 브레이크포인트
+- sm: 640px
+- md: 768px
+- lg: 1024px
+- xl: 1280px
+
+### 그리드 패턴
+```tsx
+// 카드 그리드
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+// 통계 카드
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+// 폼 레이아웃
+<div className="grid md:grid-cols-2 gap-6">
+```
+
+### 컨테이너
+```tsx
+<div className="max-w-7xl mx-auto px-6">
+```
+
+## 코드 작성 규칙
+
+1. 그라데이션 사용 최소화 - 단색 배경 선호
+2. 이모지 대신 SVG 아이콘 사용
+3. 하드코딩된 색상값 대신 Tailwind 클래스 또는 CSS 변수 사용
+4. 일관된 간격 스케일 사용
+5. 인터랙티브 요소에는 호버/포커스 상태 필수
+6. 접근성을 위한 적절한 색상 대비 유지
+7. 컴포넌트 재사용 - 기존 UI 컴포넌트 활용
+
+## 파일 구조
+
+```
+src/
+├── components/
+│   ├── ui/           # 기본 UI 컴포넌트 (Button, Input, Modal)
+│   └── features/     # 기능별 컴포넌트
+├── app/
+│   └── design-system/ # 디자인 시스템 문서 페이지
+└── styles/
+    └── globals.css   # CSS 변수 및 전역 스타일
+```
+

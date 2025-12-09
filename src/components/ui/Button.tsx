@@ -1,13 +1,12 @@
 "use client";
 
-import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { forwardRef, type ReactNode } from "react";
 import { motion, type HTMLMotionProps } from "framer-motion";
 
 type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
 type ButtonSize = "sm" | "md" | "lg";
 
-interface ButtonProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, keyof HTMLMotionProps<"button">> {
+interface ButtonProps extends HTMLMotionProps<"button"> {
   children: ReactNode;
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -17,10 +16,8 @@ interface ButtonProps
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary:
-    "bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500",
-  secondary:
-    "bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500",
+  primary: "bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500",
+  secondary: "bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500",
   danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500",
   ghost: "bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500",
 };
@@ -98,4 +95,3 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 Button.displayName = "Button";
-

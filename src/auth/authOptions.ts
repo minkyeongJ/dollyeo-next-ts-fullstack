@@ -1,10 +1,9 @@
-import type { NextAuthConfig } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-// import { connectDB } from "@/services/database.service";
+import type { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-export const authOptions: NextAuthConfig = {
+export const authOptions: NextAuthOptions = {
   providers: [
-    Credentials({
+    CredentialsProvider({
       name: "credentials",
       credentials: {
         email: { label: "이메일", type: "email" },
@@ -54,31 +53,9 @@ export const authOptions: NextAuthConfig = {
       }
       return session;
     },
-    async authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnDashboard =
-        nextUrl.pathname.startsWith("/questions") ||
-        nextUrl.pathname.startsWith("/participants") ||
-        nextUrl.pathname.startsWith("/roulette");
-
-      if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false; // 로그인 페이지로 리다이렉트
-      } else if (isLoggedIn) {
-        // 로그인 상태에서 로그인/회원가입 페이지 접근 시 대시보드로
-        if (
-          nextUrl.pathname === "/login" ||
-          nextUrl.pathname === "/register"
-        ) {
-          return Response.redirect(new URL("/questions", nextUrl));
-        }
-      }
-      return true;
-    },
   },
   session: {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
-

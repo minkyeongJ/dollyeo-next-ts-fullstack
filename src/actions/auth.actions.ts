@@ -1,6 +1,5 @@
 "use server";
 
-import { signIn, signOut } from "@/auth/auth";
 import type { ApiResponse } from "@/types/data";
 
 interface RegisterUserData {
@@ -33,34 +32,10 @@ export async function registerUser(
   }
 }
 
-/**
- * 로그인 Server Action
- */
-export async function loginWithCredentials(
-  email: string,
-  password: string
-): Promise<ApiResponse<void>> {
-  try {
-    await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    return { success: true };
-  } catch (error) {
-    console.error("로그인 실패:", error);
-    return {
-      success: false,
-      error: "이메일 또는 비밀번호가 올바르지 않습니다.",
-    };
-  }
-}
-
-/**
- * 로그아웃 Server Action
- */
-export async function logout(): Promise<void> {
-  await signOut({ redirectTo: "/login" });
-}
-
+// Note: v4에서는 signIn/signOut을 Server Action에서 직접 사용할 수 없습니다.
+// 클라이언트 컴포넌트에서 next-auth/react의 signIn/signOut을 사용하세요.
+//
+// 예시:
+// import { signIn, signOut } from "next-auth/react";
+// await signIn("credentials", { email, password, callbackUrl: "/questions" });
+// await signOut({ callbackUrl: "/login" });
