@@ -4,13 +4,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { registerUser } from "@/actions/auth.actions";
+import { Button } from "@/components/ui/Button";
 
 const registerSchema = z
   .object({
     name: z.string().min(2, "이름은 최소 2자 이상이어야 합니다."),
-    email: z.email("유효한 이메일을 입력해주세요."),
+    email: z.string().email("유효한 이메일을 입력해주세요."),
     password: z.string().min(6, "비밀번호는 최소 6자 이상이어야 합니다."),
     confirmPassword: z.string(),
   })
@@ -20,6 +23,39 @@ const registerSchema = z
   });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
+
+// 아이콘 컴포넌트
+function UserIcon() {
+  return (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+  );
+}
+
+function MailIcon() {
+  return (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    </svg>
+  );
+}
+
+function LockIcon() {
+  return (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  );
+}
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -47,121 +83,215 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">
-        <div>
-          <h2 className="text-center text-3xl font-bold text-gray-900">
-            회원가입
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            돌려요 서비스에 가입하세요
+    <div className="min-h-screen flex" style={{ background: 'var(--background)' }}>
+      {/* 왼쪽: 브랜딩 영역 */}
+      <div className="hidden lg:flex lg:w-1/2 bg-teal-600 items-center justify-center p-12">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center"
+        >
+          <motion.div
+            className="w-48 h-48 mx-auto mb-8 relative"
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Image 
+              src="/mascot.png" 
+              alt="Dollyeo 마스코트" 
+              fill
+              className="object-contain drop-shadow-2xl"
+              priority
+            />
+          </motion.div>
+          <h1 className="text-4xl font-bold text-white mb-4">Dollyeo에 가입하세요</h1>
+          <p className="text-teal-100 text-lg max-w-md">
+            무료로 시작하고 질문과 참여자를<br />
+            손쉽게 관리해보세요!
           </p>
-        </div>
+        </motion.div>
+      </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          {errors.root && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-              <p className="text-sm text-red-600">{errors.root.message}</p>
-            </div>
-          )}
-
-          <div className="space-y-4">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                이름
-              </label>
-              <input
-                {...register("name")}
-                type="text"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="홍길동"
+      {/* 오른쪽: 회원가입 폼 영역 */}
+      <div className="flex-1 flex items-center justify-center p-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-md w-full"
+        >
+          {/* 모바일용 로고 */}
+          <div className="lg:hidden text-center mb-8">
+            <motion.div
+              className="w-20 h-20 mx-auto mb-4 relative"
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Image 
+                src="/mascot.png" 
+                alt="Dollyeo 마스코트" 
+                fill
+                className="object-contain"
+                priority
               />
-              {errors.name && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.name.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                이메일
-              </label>
-              <input
-                {...register("email")}
-                type="email"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="email@example.com"
-              />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                비밀번호
-              </label>
-              <input
-                {...register("password")}
-                type="password"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="••••••••"
-              />
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                비밀번호 확인
-              </label>
-              <input
-                {...register("confirmPassword")}
-                type="password"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="••••••••"
-              />
-              {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
-            </div>
+            </motion.div>
+            <h1 className="text-2xl font-bold text-gray-900">Dollyeo</h1>
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? "가입 중..." : "회원가입"}
-          </button>
-        </form>
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-gray-900">회원가입</h2>
+              <p className="mt-2 text-sm text-gray-500">
+                새 계정을 만들어 시작하세요
+              </p>
+            </div>
 
-        <p className="text-center text-sm text-gray-600">
-          이미 계정이 있으신가요?{" "}
-          <Link href="/login" className="text-indigo-600 hover:text-indigo-500">
-            로그인
-          </Link>
-        </p>
+            {/* 에러 메시지 */}
+            {errors.root && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-lg"
+              >
+                <p className="text-sm text-rose-600 text-center">{errors.root.message}</p>
+              </motion.div>
+            )}
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  이름
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                    <UserIcon />
+                  </div>
+                  <input
+                    {...register("name")}
+                    type="text"
+                    className={`
+                      block w-full pl-10 pr-4 py-2.5 rounded-lg border
+                      text-gray-900 placeholder-gray-400
+                      focus:outline-none focus:ring-2 focus:ring-offset-0 transition-colors
+                      ${errors.name 
+                        ? "border-rose-500 focus:border-rose-500 focus:ring-rose-500" 
+                        : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                      }
+                    `}
+                    placeholder="홍길동"
+                  />
+                </div>
+                {errors.name && (
+                  <p className="mt-1 text-sm text-rose-600">{errors.name.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  이메일
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                    <MailIcon />
+                  </div>
+                  <input
+                    {...register("email")}
+                    type="email"
+                    className={`
+                      block w-full pl-10 pr-4 py-2.5 rounded-lg border
+                      text-gray-900 placeholder-gray-400
+                      focus:outline-none focus:ring-2 focus:ring-offset-0 transition-colors
+                      ${errors.email 
+                        ? "border-rose-500 focus:border-rose-500 focus:ring-rose-500" 
+                        : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                      }
+                    `}
+                    placeholder="email@example.com"
+                  />
+                </div>
+                {errors.email && (
+                  <p className="mt-1 text-sm text-rose-600">{errors.email.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  비밀번호
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                    <LockIcon />
+                  </div>
+                  <input
+                    {...register("password")}
+                    type="password"
+                    className={`
+                      block w-full pl-10 pr-4 py-2.5 rounded-lg border
+                      text-gray-900 placeholder-gray-400
+                      focus:outline-none focus:ring-2 focus:ring-offset-0 transition-colors
+                      ${errors.password 
+                        ? "border-rose-500 focus:border-rose-500 focus:ring-rose-500" 
+                        : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                      }
+                    `}
+                    placeholder="••••••••"
+                  />
+                </div>
+                {errors.password && (
+                  <p className="mt-1 text-sm text-rose-600">{errors.password.message}</p>
+                )}
+                <p className="mt-1 text-xs text-gray-500">최소 6자 이상 입력해주세요</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  비밀번호 확인
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                    <CheckIcon />
+                  </div>
+                  <input
+                    {...register("confirmPassword")}
+                    type="password"
+                    className={`
+                      block w-full pl-10 pr-4 py-2.5 rounded-lg border
+                      text-gray-900 placeholder-gray-400
+                      focus:outline-none focus:ring-2 focus:ring-offset-0 transition-colors
+                      ${errors.confirmPassword 
+                        ? "border-rose-500 focus:border-rose-500 focus:ring-rose-500" 
+                        : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                      }
+                    `}
+                    placeholder="••••••••"
+                  />
+                </div>
+                {errors.confirmPassword && (
+                  <p className="mt-1 text-sm text-rose-600">{errors.confirmPassword.message}</p>
+                )}
+              </div>
+
+              <Button
+                type="submit"
+                isLoading={isSubmitting}
+                className="w-full mt-2"
+                size="lg"
+              >
+                회원가입
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-500">
+                이미 계정이 있으신가요?{" "}
+                <Link href="/login" className="text-indigo-600 hover:text-indigo-500 font-medium">
+                  로그인
+                </Link>
+              </p>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
