@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -383,14 +384,17 @@ export default function DesignSystemPage() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img 
-                src="/mascot.png" 
-                alt="돌려요 마스코트" 
-                className="w-10 h-10 object-contain"
-              />
+              <div className="w-10 h-10 relative">
+                <Image 
+                  src="/mascot.png" 
+                  alt="Dollyeo 마스코트" 
+                  fill
+                  className="object-contain"
+                />
+              </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">디자인 시스템</h1>
-                <p className="text-xs text-gray-500">돌려요 스타일 가이드</p>
+                <p className="text-xs text-gray-500">Dollyeo 스타일 가이드</p>
               </div>
             </div>
             <nav className="flex items-center gap-6">
@@ -412,13 +416,19 @@ export default function DesignSystemPage() {
             className="bg-indigo-600 rounded-3xl p-8 md:p-12 text-white"
           >
             <div className="flex flex-col md:flex-row items-center gap-8">
-              <motion.img 
-                src="/mascot.png" 
-                alt="돌려요 마스코트" 
-                className="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-lg"
+              <motion.div
+                className="w-32 h-32 md:w-40 md:h-40 relative"
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              />
+              >
+                <Image 
+                  src="/mascot.png" 
+                  alt="Dollyeo 마스코트" 
+                  fill
+                  className="object-contain drop-shadow-lg"
+                  priority
+                />
+              </motion.div>
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">
                   교육용 커뮤니티를 위한<br />디자인 시스템
@@ -898,13 +908,16 @@ export default function DesignSystemPage() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img 
-                src="/mascot.png" 
-                alt="돌려요 마스코트" 
-                className="w-8 h-8 object-contain"
-              />
+              <div className="w-8 h-8 relative">
+                <Image 
+                  src="/mascot.png" 
+                  alt="Dollyeo 마스코트" 
+                  fill
+                  className="object-contain"
+                />
+              </div>
               <p className="text-sm text-gray-500">
-                © 2024 돌려요. 디자인 시스템 가이드
+                © 2024 Dollyeo. 디자인 시스템 가이드
               </p>
             </div>
             <p className="text-sm text-gray-400">

@@ -53,7 +53,7 @@ export default async function SharePage({ params }: SharePageProps) {
             href="/"
             className="text-indigo-600 hover:text-indigo-500 text-sm"
           >
-            돌려요 시작하기 →
+            Dollyeo 시작하기 →
           </a>
         </div>
       </div>
