@@ -82,6 +82,23 @@ export const ParticipantsService = {
     // TODO: 실제 DB 삭제
     throw new Error("실제 DB 연결이 구현되지 않았습니다.");
   },
+
+  /**
+   * 참여자 포함/제외 토글
+   */
+  toggleIncluded: async (
+    id: string,
+    included: boolean,
+    useMock: boolean
+  ): Promise<Participant | null> => {
+    if (useMock) {
+      await delay(200);
+      return mockParticipantsDB.toggleIncluded(id, included);
+    }
+
+    // TODO: 실제 DB 토글
+    throw new Error("실제 DB 연결이 구현되지 않았습니다.");
+  },
 };
 
 // 네트워크 지연 시뮬레이션 헬퍼

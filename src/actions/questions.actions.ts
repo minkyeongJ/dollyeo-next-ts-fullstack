@@ -104,3 +104,26 @@ export async function deleteQuestion(id: string): Promise<ApiResponse<void>> {
   }
 }
 
+/**
+ * 질문 포함/제외 토글
+ */
+export async function toggleQuestionIncluded(
+  id: string,
+  included: boolean
+): Promise<ApiResponse<Question>> {
+  try {
+    const question = await QuestionsService.toggleIncluded(id, included, USE_MOCK);
+
+    if (!question) {
+      return { success: false, error: "질문을 찾을 수 없습니다." };
+    }
+
+    revalidatePath("/questions");
+    revalidatePath("/roulette");
+    return { success: true, data: question };
+  } catch (error) {
+    console.error("질문 토글 실패:", error);
+    return { success: false, error: "질문 상태 변경에 실패했습니다." };
+  }
+}
+

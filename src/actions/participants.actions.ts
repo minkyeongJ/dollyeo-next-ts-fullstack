@@ -112,3 +112,26 @@ export async function deleteParticipant(
   }
 }
 
+/**
+ * 참여자 포함/제외 토글
+ */
+export async function toggleParticipantIncluded(
+  id: string,
+  included: boolean
+): Promise<ApiResponse<Participant>> {
+  try {
+    const participant = await ParticipantsService.toggleIncluded(id, included, USE_MOCK);
+
+    if (!participant) {
+      return { success: false, error: "참여자를 찾을 수 없습니다." };
+    }
+
+    revalidatePath("/participants");
+    revalidatePath("/roulette");
+    return { success: true, data: participant };
+  } catch (error) {
+    console.error("참여자 토글 실패:", error);
+    return { success: false, error: "참여자 상태 변경에 실패했습니다." };
+  }
+}
+

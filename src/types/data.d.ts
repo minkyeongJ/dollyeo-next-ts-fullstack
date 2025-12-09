@@ -15,6 +15,7 @@ export interface Question {
   id: string;
   content: string;
   userId: string;
+  isIncluded: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,6 +26,7 @@ export interface Participant {
   id: string;
   name: string;
   userId: string;
+  isIncluded: boolean;
   createdAt: Date;
 }
 
@@ -43,6 +45,19 @@ export interface RouletteState {
   items: string[];
   isSpinning: boolean;
   result: RouletteResult | null;
+}
+
+// 참여자-질문 매칭 기록
+export interface RouletteRecord {
+  id: string;
+  participantId: string;
+  participantName: string;
+  questionId: string;
+  questionContent: string;
+  round: number;
+  timestamp: Date;
+  isCorrect?: boolean; // 맞춤/틀림 여부 (undefined: 미선택)
+  groupName?: string;
 }
 
 // ==================== Sharing ====================

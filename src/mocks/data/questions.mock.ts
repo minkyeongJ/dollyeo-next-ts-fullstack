@@ -5,6 +5,7 @@ export const mockQuestions: Question[] = [
     id: "q-1",
     content: "오늘 점심 뭐 먹을까요?",
     userId: "user-1",
+    isIncluded: true,
     createdAt: new Date("2024-01-10"),
     updatedAt: new Date("2024-01-10"),
   },
@@ -12,6 +13,7 @@ export const mockQuestions: Question[] = [
     id: "q-2",
     content: "다음 스프린트에서 어떤 기능을 먼저 개발할까요?",
     userId: "user-1",
+    isIncluded: true,
     createdAt: new Date("2024-01-11"),
     updatedAt: new Date("2024-01-11"),
   },
@@ -19,6 +21,7 @@ export const mockQuestions: Question[] = [
     id: "q-3",
     content: "이번 주 코드 리뷰는 누가 담당할까요?",
     userId: "user-1",
+    isIncluded: true,
     createdAt: new Date("2024-01-12"),
     updatedAt: new Date("2024-01-12"),
   },
@@ -26,6 +29,7 @@ export const mockQuestions: Question[] = [
     id: "q-4",
     content: "팀 회의 발표자는 누구로 할까요?",
     userId: "user-1",
+    isIncluded: true,
     createdAt: new Date("2024-01-13"),
     updatedAt: new Date("2024-01-13"),
   },
@@ -33,6 +37,7 @@ export const mockQuestions: Question[] = [
     id: "q-5",
     content: "오늘 회식 장소는 어디로 할까요?",
     userId: "user-1",
+    isIncluded: false,
     createdAt: new Date("2024-01-14"),
     updatedAt: new Date("2024-01-14"),
   },
@@ -58,6 +63,7 @@ export const mockQuestionsDB = {
       id: `q-${Date.now()}`,
       content,
       userId,
+      isIncluded: true,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -77,6 +83,18 @@ export const mockQuestionsDB = {
     return questionsStore[index];
   },
 
+  toggleIncluded: (id: string, included: boolean): Question | null => {
+    const index = questionsStore.findIndex((q) => q.id === id);
+    if (index === -1) return null;
+
+    questionsStore[index] = {
+      ...questionsStore[index],
+      isIncluded: included,
+      updatedAt: new Date(),
+    };
+    return questionsStore[index];
+  },
+
   delete: (id: string): boolean => {
     const index = questionsStore.findIndex((q) => q.id === id);
     if (index === -1) return false;
@@ -90,4 +108,3 @@ export const mockQuestionsDB = {
     questionsStore = [...mockQuestions];
   },
 };
-

@@ -5,36 +5,42 @@ export const mockParticipants: Participant[] = [
     id: "p-1",
     name: "김철수",
     userId: "user-1",
+    isIncluded: true,
     createdAt: new Date("2024-01-10"),
   },
   {
     id: "p-2",
     name: "이영희",
     userId: "user-1",
+    isIncluded: true,
     createdAt: new Date("2024-01-10"),
   },
   {
     id: "p-3",
     name: "박민수",
     userId: "user-1",
+    isIncluded: true,
     createdAt: new Date("2024-01-11"),
   },
   {
     id: "p-4",
     name: "최지연",
     userId: "user-1",
+    isIncluded: true,
     createdAt: new Date("2024-01-11"),
   },
   {
     id: "p-5",
     name: "정우성",
     userId: "user-1",
+    isIncluded: false,
     createdAt: new Date("2024-01-12"),
   },
   {
     id: "p-6",
     name: "한소희",
     userId: "user-1",
+    isIncluded: true,
     createdAt: new Date("2024-01-12"),
   },
 ];
@@ -59,6 +65,7 @@ export const mockParticipantsDB = {
       id: `p-${Date.now()}`,
       name,
       userId,
+      isIncluded: true,
       createdAt: new Date(),
     };
     participantsStore.push(newParticipant);
@@ -76,6 +83,17 @@ export const mockParticipantsDB = {
     return participantsStore[index];
   },
 
+  toggleIncluded: (id: string, included: boolean): Participant | null => {
+    const index = participantsStore.findIndex((p) => p.id === id);
+    if (index === -1) return null;
+
+    participantsStore[index] = {
+      ...participantsStore[index],
+      isIncluded: included,
+    };
+    return participantsStore[index];
+  },
+
   delete: (id: string): boolean => {
     const index = participantsStore.findIndex((p) => p.id === id);
     if (index === -1) return false;
@@ -89,4 +107,3 @@ export const mockParticipantsDB = {
     participantsStore = [...mockParticipants];
   },
 };
-
