@@ -9,7 +9,7 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   children: ReactNode;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 }
 
 const sizeStyles = {
@@ -17,6 +17,8 @@ const sizeStyles = {
   md: "max-w-md",
   lg: "max-w-lg",
   xl: "max-w-xl",
+  "2xl": "max-w-2xl",
+  "3xl": "max-w-3xl",
 };
 
 export function Modal({
@@ -65,7 +67,7 @@ export function Modal({
               transition={{ type: "spring", duration: 0.3 }}
               className={`
                 relative w-full ${sizeStyles[size]}
-                bg-white rounded-xl shadow-xl
+                bg-white dark:bg-gray-900 rounded-xl shadow-xl
                 p-6
               `}
             >
