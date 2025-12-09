@@ -1,3 +1,25 @@
+# Dollyeo 프로젝트 규칙
+
+## 프로젝트 정보
+
+- **프로젝트 문서**: `README.md` 파일에서 프로젝트 구조, 기술 스택, 데이터 흐름을 확인할 수 있습니다.
+- **README 업데이트 규칙**: 
+  - 새로운 기능, 페이지, 컴포넌트 추가 시 README.md의 프로젝트 구조 섹션 업데이트
+  - 새로운 의존성 추가 시 주요 의존성 섹션 업데이트
+  - 환경 변수 변경 시 환경 변수 설정 섹션 업데이트
+  - 새로운 스크립트 추가 시 사용 가능한 스크립트 섹션 업데이트
+
+## 주요 참조 파일
+
+| 파일 | 용도 |
+|------|------|
+| `README.md` | 프로젝트 구조, 기술 스택, 시작 가이드 |
+| `src/app/design-system/page.tsx` | 디자인 시스템 시각화 페이지 |
+| `src/app/globals.css` | CSS 변수 및 전역 스타일 정의 |
+| `src/types/data.d.ts` | 데이터 타입 정의 |
+
+---
+
 # 프로젝트 디자인 시스템 가이드
 
 이 프로젝트는 클라썸 스타일의 교육용 커뮤니티 플랫폼 디자인 시스템을 따릅니다.
@@ -15,14 +37,14 @@ UI 컴포넌트 작성 시 아래 가이드라인을 준수해주세요.
 // 마스코트 사용 예시
 <img 
   src="/mascot.png" 
-  alt="돌려요 마스코트" 
+  alt="Dollyeo 마스코트" 
   className="w-10 h-10 object-contain"
 />
 
 // 애니메이션 적용 예시 (Framer Motion)
 <motion.img 
   src="/mascot.png" 
-  alt="돌려요 마스코트" 
+  alt="Dollyeo 마스코트" 
   animate={{ y: [0, -8, 0] }}
   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
 />
@@ -228,30 +250,80 @@ import { motion } from "framer-motion";
 - `animate-scale-in`: 스케일 인
 - `transition-all`, `transition-colors`, `transition-shadow`: 부드러운 전환
 
-## 반응형 디자인
+## 반응형 디자인 (필수)
 
-### 브레이크포인트
-- sm: 640px
-- md: 768px
-- lg: 1024px
-- xl: 1280px
+**모든 UI는 모바일, 태블릿, PC에서 최적화되어야 합니다.**
 
-### 그리드 패턴
+### 디바이스별 브레이크포인트
+| 디바이스 | 브레이크포인트 | Tailwind 프리픽스 |
+|---------|--------------|------------------|
+| 모바일 | 0 ~ 639px | (기본값) |
+| 태블릿 | 640px ~ 1023px | `sm:`, `md:` |
+| PC | 1024px 이상 | `lg:`, `xl:` |
+
+### Mobile-First 원칙
+- 항상 **모바일 먼저** 스타일링 후 큰 화면 대응
+- 기본 스타일 → `sm:` → `md:` → `lg:` → `xl:` 순서로 작성
+
+### 디바이스별 레이아웃 패턴
 ```tsx
-// 카드 그리드
+// 카드 그리드: 모바일 1열 → 태블릿 2열 → PC 3열
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-// 통계 카드
-<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+// 사이드바 레이아웃: 모바일 숨김 → PC 표시
+<aside className="hidden lg:block lg:w-64">
 
-// 폼 레이아웃
-<div className="grid md:grid-cols-2 gap-6">
+// 네비게이션: 모바일 햄버거 → PC 가로 메뉴
+<nav className="hidden md:flex"> {/* PC 메뉴 */}
+<button className="md:hidden"> {/* 모바일 햄버거 */}
+
+// 폼 레이아웃: 모바일 1열 → 태블릿 이상 2열
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+// 통계 카드: 모바일 2열 → PC 4열
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+```
+
+### 반응형 간격 및 패딩
+```tsx
+// 컨테이너 패딩
+<div className="px-4 sm:px-6 lg:px-8">
+
+// 섹션 간격
+<section className="py-8 md:py-12 lg:py-16">
+
+// 카드 패딩
+<div className="p-4 md:p-6">
+```
+
+### 반응형 타이포그래피
+```tsx
+// 제목: 모바일 작게 → PC 크게
+<h1 className="text-2xl md:text-3xl lg:text-4xl">
+
+// 본문
+<p className="text-sm md:text-base">
+```
+
+### 반응형 이미지
+```tsx
+// Next.js Image 컴포넌트 사용 (비율 유지)
+<div className="w-32 h-32 md:w-40 md:h-40 relative">
+  <Image src="/image.png" alt="" fill className="object-contain" />
+</div>
 ```
 
 ### 컨테이너
 ```tsx
-<div className="max-w-7xl mx-auto px-6">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 ```
+
+### 반응형 체크리스트
+- [ ] 모바일(375px)에서 콘텐츠 잘림 없이 표시되는가?
+- [ ] 태블릿(768px)에서 적절한 여백이 있는가?
+- [ ] PC(1280px)에서 최대 너비가 제한되어 있는가?
+- [ ] 터치 타겟이 최소 44px 이상인가? (모바일)
+- [ ] 텍스트가 읽기 편한 크기인가?
 
 ## 코드 작성 규칙
 
