@@ -1,5 +1,27 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type { RouletteResult } from "@/types/data";
+
+// ==================== Theme Store ====================
+
+type Theme = "light" | "dark" | "system";
+
+interface ThemeStore {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+}
+
+export const useThemeStore = create<ThemeStore>()(
+  persist(
+    (set) => ({
+      theme: "system",
+      setTheme: (theme) => set({ theme }),
+    }),
+    {
+      name: "dollyeo-theme",
+    }
+  )
+);
 
 // ==================== UI Store ====================
 
